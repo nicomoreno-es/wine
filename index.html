@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terruño — Blog de Vinos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* ─── Reset & Base ─────────────────────────────── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; scroll-behavior: smooth; }
+        body {
+            background: #FAFAF7;
+            color: #2C2C24;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+        img { display: block; max-width: 100%; }
+
+        /* ─── Fade-in ──────────────────────────────────── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.85s ease, transform 0.85s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-in.delay-1 { transition-delay: 0.12s; }
+        .fade-in.delay-2 { transition-delay: 0.24s; }
+
+        /* ─── Shared ────────────────────────────────────── */
+        .divider { width: 100%; height: 1px; background: #E8E4DC; }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #C4A882;
+            margin-bottom: 1.75rem;
+        }
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: #C4A882;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border: 1px solid #4A5240;
+            color: #4A5240;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+        }
+        .btn-outline:hover { background: #4A5240; color: #FAFAF7; }
+
+        .link-arrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #4A5240;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: gap 0.3s;
+        }
+        .link-arrow:hover { gap: 1.25rem; }
+        .link-arrow::after { content: '→'; font-size: 1rem; }
+
+        /* ─── HEADER ────────────────────────────────────── */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(250,250,247,0.96);
+            backdrop-filter: blur(8px);
+        }
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            height: 72px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+        }
+        .nav-left, .nav-right {
+            display: flex;
+            gap: 2.25rem;
+            align-items: center;
+        }
+        .nav-right { justify-content: flex-end; }
+        .header-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #4A5240;
+            text-decoration: none;
+            text-align: center;
+            white-space: nowrap;
+        }
+        nav a {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #4A5240;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        nav a:hover { color: #C4A882; }
+        .header-rule { height: 1px; background: #E8E4DC; }
+
+        /* ─── HERO ──────────────────────────────────────── */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 620px;
+            overflow: hidden;
+        }
+        .hero-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.04) 0%,
+                rgba(0,0,0,0.42) 100%
+            );
+        }
+        .hero-content {
+            position: absolute;
+            bottom: 13%;
+            left: 0; right: 0;
+            text-align: center;
+            color: #FAFAF7;
+            padding: 0 2rem;
+        }
+        .hero-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title {
+            font-size: clamp(3.2rem, 9vw, 8rem);
+            font-weight: 300;
+            line-height: 1.0;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title em { font-style: italic; }
+        .hero-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            opacity: 0.7;
+        }
+        .hero-scroll {
+            position: absolute;
+            bottom: 2.25rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            color: rgba(250,250,247,0.55);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+        }
+        .hero-scroll::after {
+            content: '';
+            display: block;
+            width: 1px; height: 40px;
+            background: rgba(250,250,247,0.45);
+            animation: scrollLine 2.2s ease-in-out infinite;
+        }
+        @keyframes scrollLine {
+            0%,100% { opacity: 1; transform: scaleY(1); }
+            50%      { opacity: 0.25; transform: scaleY(0.4); }
+        }
+
+        /* ─── SOBRE EL BLOG ─────────────────────────────── */
+        .about {
+            padding: 9rem 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 55fr 45fr;
+            gap: 7rem;
+            align-items: center;
+        }
+        .about-title {
+            font-size: clamp(2.4rem, 4vw, 4rem);
+            color: #4A5240;
+            margin-bottom: 2rem;
+        }
+        .about-body p {
+            color: #5C5C52;
+            font-size: 1rem;
+            max-width: 52ch;
+            margin-bottom: 1.5rem;
+        }
+        .about-image-wrap { position: relative; }
+        .about-img-main {
+            width: 100%;
+            aspect-ratio: 4/5;
+            object-fit: cover;
+        }
+        .about-img-float {
+            position: absolute;
+            bottom: -2.5rem;
+            left: -2.5rem;
+            width: 48%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border: 6px solid #FAFAF7;
+        }
+
+        /* ─── VIDEO SECTION ─────────────────────────────── */
+        .video-section {
+            position: relative;
+            height: 82vh;
+            min-height: 480px;
+            overflow: hidden;
+        }
+        .video-bg {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+        }
+        .video-overlay {
+            position: absolute; inset: 0;
+            background: rgba(44,44,36,0.52);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2.75rem;
+        }
+        .video-title {
+            font-size: clamp(2rem, 5vw, 4.5rem);
+            font-weight: 300;
+            color: #FAFAF7;
+            text-align: center;
+            max-width: 680px;
+            padding: 0 2rem;
+            line-height: 1.15;
+        }
+        .play-btn {
+            width: 76px; height: 76px;
+            border: 1px solid rgba(250,250,247,0.65);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: transparent;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .play-btn:hover {
+            border-color: #C4A882;
+            background: rgba(250,250,247,0.06);
+        }
+        .play-btn svg {
+            fill: #FAFAF7;
+            margin-left: 5px;
+        }
+
+        /* ─── VINOS DESTACADOS ──────────────────────────── */
+        .wines {
+            padding: 9rem 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .wines-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .wines-title {
+            font-size: clamp(2rem, 3.5vw, 3.5rem);
+            color: #4A5240;
+        }
+        .wines-tabs {
+            display: flex;
+            border-bottom: 1px solid #E8E4DC;
+            align-self: flex-end;
+        }
+        .tab-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.6rem 1.6rem;
+            border: none;
+            background: transparent;
+            color: #8C8C7C;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 1px;
+            background: #4A5240;
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        .tab-btn.active { color: #4A5240; }
+        .tab-btn.active::after { transform: scaleX(1); }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .wine-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+        .wine-region {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #C4A882;
+            margin-bottom: 1rem;
+        }
+        .wine-name {
+            font-size: clamp(1.9rem, 2.8vw, 3rem);
+            color: #4A5240;
+            margin-bottom: 1.25rem;
+        }
+        .wine-body {
+            color: #5C5C52;
+            font-size: 0.95rem;
+            max-width: 46ch;
+            margin-bottom: 2rem;
+        }
+        .wine-details {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .wine-detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .wine-detail-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #8C8C7C;
+        }
+        .wine-detail-val {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: #4A5240;
+        }
+        .wine-collage {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            grid-template-rows: auto auto;
+            gap: 0.75rem;
+        }
+        .wine-collage img { width: 100%; object-fit: cover; }
+        .wine-collage img:first-child { grid-row: span 2; aspect-ratio: 3/4; }
+        .wine-collage img:nth-child(2) { aspect-ratio: 4/3; }
+        .wine-collage img:nth-child(3) { aspect-ratio: 1; }
+
+        /* ─── ÚLTIMAS ENTRADAS ──────────────────────────── */
+        .posts { padding: 6rem 2.5rem; background: #F5F4EF; }
+        .posts-inner { max-width: 1400px; margin: 0 auto; }
+        .posts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .posts-title {
+            font-size: clamp(2rem, 3vw, 3rem);
+            color: #4A5240;
+        }
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+        }
+        .post-card { cursor: pointer; }
+        .post-img-wrap {
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .post-img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+        .post-card:hover .post-img { transform: scale(1.045); }
+        .post-category {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #4A5240;
+            margin-bottom: 0.65rem;
+        }
+        .post-title {
+            font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+            color: #2C2C24;
+            margin-bottom: 0.75rem;
+            line-height: 1.25;
+        }
+        .post-date {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            color: #8C8C7C;
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── INSTAGRAM ─────────────────────────────────── */
+        .instagram {
+            padding: 6rem 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .instagram-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .instagram-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #8C8C7C;
+        }
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+        .insta-item { overflow: hidden; }
+        .insta-item img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            transition: transform 0.55s ease;
+        }
+        .insta-item:hover img { transform: scale(1.06); }
+
+        /* ─── DARK SECTION ──────────────────────────────── */
+        .dark-section {
+            position: relative;
+            padding: 10rem 2.5rem;
+            background: #2C2C24;
+            overflow: hidden;
+        }
+        .dark-bg {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: 0.28;
+        }
+        .dark-content {
+            position: relative;
+            max-width: 680px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .dark-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #C4A882;
+            margin-bottom: 2rem;
+        }
+        .dark-title {
+            font-size: clamp(2.6rem, 5.5vw, 5.5rem);
+            font-weight: 300;
+            color: #FAFAF7;
+            line-height: 1.08;
+            margin-bottom: 1.5rem;
+        }
+        .dark-title em { font-style: italic; }
+        .dark-body {
+            color: rgba(250,250,247,0.58);
+            font-size: 0.9rem;
+            max-width: 40ch;
+            margin: 0 auto 3rem;
+        }
+        .dark-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-outline-cream {
+            display: inline-block;
+            padding: 0.9rem 2.2rem;
+            border: 1px solid rgba(250,250,247,0.45);
+            color: #FAFAF7;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: border-color 0.3s, color 0.3s;
+        }
+        .btn-outline-cream:hover { border-color: #C4A882; color: #C4A882; }
+        .btn-outline-accent {
+            display: inline-block;
+            padding: 0.9rem 2.2rem;
+            border: 1px solid #C4A882;
+            color: #C4A882;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+        }
+        .btn-outline-accent:hover { background: #C4A882; color: #2C2C24; }
+
+        /* ─── FOOTER ────────────────────────────────────── */
+        footer {
+            background: #FAFAF7;
+            padding: 6rem 2.5rem 3rem;
+        }
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #4A5240;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 3rem;
+        }
+        .footer-rule { width: 100%; height: 1px; background: #E8E4DC; margin-bottom: 3rem; }
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+        }
+        .footer-col h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #4A5240;
+            margin-bottom: 1.5rem;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.7rem; }
+        .footer-col ul li a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #8C8C7C;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover { color: #4A5240; }
+        .footer-col .footer-desc {
+            font-size: 0.8rem;
+            color: #8C8C7C;
+            line-height: 1.6;
+            margin-bottom: 1.1rem;
+        }
+        .footer-newsletter {
+            display: flex;
+            border-bottom: 1px solid #E8E4DC;
+        }
+        .footer-newsletter input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: #2C2C24;
+            padding: 0.55rem 0;
+            outline: none;
+        }
+        .footer-newsletter input::placeholder { color: #8C8C7C; }
+        .footer-newsletter button {
+            border: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #4A5240;
+            cursor: pointer;
+            padding: 0.55rem 0 0.55rem 1rem;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+        .footer-newsletter button:hover { color: #C4A882; }
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid #E8E4DC;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .footer-bottom p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            color: #8C8C7C;
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── RESPONSIVE ─────────────────────────────────── */
+        @media (max-width: 1100px) {
+            .about-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+            .about-img-float { display: none; }
+            .about-body p { max-width: 100%; }
+            .wine-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .header-inner { padding: 0 1.25rem; }
+            .nav-left .hide-mobile,
+            .nav-right .hide-mobile { display: none; }
+            .posts-grid { grid-template-columns: 1fr; }
+            .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .wines { padding: 6rem 1.25rem; }
+            .about { padding: 6rem 1.25rem; }
+        }
+        @media (max-width: 520px) {
+            .header-inner { grid-template-columns: auto auto auto; gap: 0.5rem; }
+            .header-logo { font-size: 1.1rem; letter-spacing: 0.1em; }
+            .nav-left, .nav-right { gap: 1rem; }
+            .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: 1fr; }
+            .dark-ctas { flex-direction: column; align-items: center; }
+            .posts { padding: 5rem 1.25rem; }
+            .instagram { padding: 5rem 1.25rem; }
+            footer { padding: 5rem 1.25rem 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<header>
+    <div class="header-inner">
+        <nav class="nav-left">
+            <a href="#">El Blog</a>
+            <a href="#" class="hide-mobile">Vinos</a>
+            <a href="#" class="hide-mobile">Regiones</a>
+        </nav>
+        <a href="#" class="header-logo">Terruño</a>
+        <nav class="nav-right">
+            <a href="#" class="hide-mobile">Guías</a>
+            <a href="#" class="hide-mobile">Agenda</a>
+            <a href="#">Contacto</a>
+        </nav>
+    </div>
+    <div class="header-rule"></div>
+</header>
+
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section class="hero">
+    <img
+        src="https://images.unsplash.com/photo-1504279577054-acfeccf8fc52?w=1920&q=80&fit=crop&crop=center"
+        alt="Viñedo provenzal al atardecer"
+        class="hero-img"
+    >
+    <div class="hero-overlay"></div>
+    <div class="hero-content fade-in">
+        <p class="hero-eyebrow">Una mirada íntima al mundo del vino</p>
+        <h1 class="hero-title">El alma<br><em>del vino</em></h1>
+        <p class="hero-sub">Viñedos, bodegas y reflexiones desde el terruño</p>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SOBRE EL BLOG
+══════════════════════════════════════════ -->
+<section class="about">
+    <div class="about-grid">
+        <div class="about-body fade-in">
+            <span class="section-label">El blog</span>
+            <h2 class="about-title">Un viaje entre<br>cepas y silencios</h2>
+            <p>Terruño nació de la convicción de que cada vino lleva impreso el paisaje que lo vio crecer. Aquí exploramos bodegas remotas, conversamos con viticultores apasionados y destilamos el conocimiento en catas honestas.</p>
+            <p>Sin pretensiones, con rigor. Para quien quiere entender el vino más allá de la etiqueta y encontrar en él algo que valga la pena recordar.</p>
+            <a href="#" class="btn-outline" style="margin-top:1.5rem;">Conoce el proyecto</a>
+        </div>
+        <div class="about-image-wrap fade-in delay-1">
+            <img
+                src="https://images.unsplash.com/photo-1528823872057-9c018a7a7553?w=800&q=80&fit=crop"
+                alt="Interior de bodega"
+                class="about-img-main"
+            >
+            <img
+                src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=80&fit=crop&crop=center"
+                alt="Copa de vino"
+                class="about-img-float"
+            >
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════════
+     VÍDEO
+══════════════════════════════════════════ -->
+<section class="video-section">
+    <img
+        src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1920&q=80&fit=crop&crop=center"
+        alt="Interior de bodega"
+        class="video-bg"
+    >
+    <div class="video-overlay">
+        <h2 class="video-title fade-in">Entre barricas<br>y tiempo detenido</h2>
+        <button class="play-btn fade-in delay-1" aria-label="Reproducir vídeo">
+            <svg width="18" height="22" viewBox="0 0 18 22">
+                <path d="M1 1l16 10L1 21V1z"/>
+            </svg>
+        </button>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     VINOS DESTACADOS
+══════════════════════════════════════════ -->
+<section class="wines">
+    <div class="wines-header fade-in">
+        <h2 class="wines-title">Vinos destacados</h2>
+        <div class="wines-tabs">
+            <button class="tab-btn active" data-tab="tintos">Tintos</button>
+            <button class="tab-btn" data-tab="blancos">Blancos</button>
+            <button class="tab-btn" data-tab="rosados">Rosados</button>
+        </div>
+    </div>
+
+    <div class="wines-content">
+
+        <!-- TINTOS -->
+        <div class="tab-panel active" id="tintos">
+            <div class="wine-grid">
+                <div class="fade-in">
+                    <p class="wine-region">Ribera del Duero · Tempranillo</p>
+                    <h3 class="wine-name">Pago del<br>Cielo Oscuro</h3>
+                    <p class="wine-body">Un tinto de guarda que captura la esencia de la meseta castellana. Notas de mora negra, cuero curtido y un final mineral que evoca las piedras calizas del viñedo centenario.</p>
+                    <div class="wine-details">
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Añada</span>
+                            <span class="wine-detail-val">2019</span>
+                        </div>
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Crianza</span>
+                            <span class="wine-detail-val">18 meses roble</span>
+                        </div>
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Puntuación</span>
+                            <span class="wine-detail-val">94 pts</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn-outline">Leer la cata completa</a>
+                </div>
+                <div class="wine-collage fade-in delay-1">
+                    <img src="https://images.unsplash.com/photo-1474722883778-792e7990302f?w=600&q=80&fit=crop" alt="Barrica de vino">
+                    <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=80&fit=crop" alt="Copa de vino tinto">
+                    <img src="https://images.unsplash.com/photo-1547595628-c61a29f496f0?w=400&q=80&fit=crop" alt="Viñedo">
+                </div>
+            </div>
+        </div>
+
+        <!-- BLANCOS -->
+        <div class="tab-panel" id="blancos">
+            <div class="wine-grid">
+                <div class="fade-in">
+                    <p class="wine-region">Rías Baixas · Albariño</p>
+                    <h3 class="wine-name">Mar de<br>Pedralonga</h3>
+                    <p class="wine-body">La brisa atlántica hecha vino. Albariño de viñedo en socalco con notas de melocotón blanco, flor de azahar y una salinidad elegante que invita a la segunda copa.</p>
+                    <div class="wine-details">
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Añada</span>
+                            <span class="wine-detail-val">2023</span>
+                        </div>
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Crianza</span>
+                            <span class="wine-detail-val">Lías 6 meses</span>
+                        </div>
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Puntuación</span>
+                            <span class="wine-detail-val">91 pts</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn-outline">Leer la cata completa</a>
+                </div>
+                <div class="wine-collage fade-in delay-1">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&fit=crop" alt="Vino blanco">
+                    <img src="https://images.unsplash.com/photo-1566995541428-f2246c17cda1?w=400&q=80&fit=crop" alt="Viñedo costero">
+                    <img src="https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?w=400&q=80&fit=crop" alt="Bodega blanca">
+                </div>
+            </div>
+        </div>
+
+        <!-- ROSADOS -->
+        <div class="tab-panel" id="rosados">
+            <div class="wine-grid">
+                <div class="fade-in">
+                    <p class="wine-region">Navarra · Garnacha</p>
+                    <h3 class="wine-name">Rosa<br>de Vendimia</h3>
+                    <p class="wine-body">Rosado de sangría mínima que captura lo mejor de la garnacha navarra. Fresa silvestre, pomelo y una textura suave que lo convierte en el compañero perfecto del atardecer.</p>
+                    <div class="wine-details">
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Añada</span>
+                            <span class="wine-detail-val">2024</span>
+                        </div>
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Crianza</span>
+                            <span class="wine-detail-val">Sin crianza</span>
+                        </div>
+                        <div class="wine-detail-item">
+                            <span class="wine-detail-label">Puntuación</span>
+                            <span class="wine-detail-val">89 pts</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn-outline">Leer la cata completa</a>
+                </div>
+                <div class="wine-collage fade-in delay-1">
+                    <img src="https://images.unsplash.com/photo-1532634896-26c21888c7bc?w=600&q=80&fit=crop" alt="Vino rosado">
+                    <img src="https://images.unsplash.com/photo-1523990697876-57a0b1a4d791?w=400&q=80&fit=crop" alt="Mesa con vino">
+                    <img src="https://images.unsplash.com/photo-1429091967630-a82c18d2b4a6?w=400&q=80&fit=crop" alt="Atardecer viñedo">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════════
+     ÚLTIMAS ENTRADAS
+══════════════════════════════════════════ -->
+<section class="posts">
+    <div class="posts-inner">
+        <div class="posts-header fade-in">
+            <h2 class="posts-title">Últimas entradas</h2>
+            <a href="#" class="link-arrow">Ver todas</a>
+        </div>
+        <div class="posts-grid">
+            <article class="post-card fade-in">
+                <div class="post-img-wrap">
+                    <img
+                        src="https://images.unsplash.com/photo-1534361960057-19f4434a337d?w=700&q=80&fit=crop"
+                        alt="Viñedo al amanecer"
+                        class="post-img"
+                    >
+                </div>
+                <p class="post-category">Regiones</p>
+                <h3 class="post-title">El Priorat que nadie conoce: vinos de altura y suelos de pizarra</h3>
+                <p class="post-date">12 febrero 2026</p>
+            </article>
+            <article class="post-card fade-in delay-1">
+                <div class="post-img-wrap">
+                    <img
+                        src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=700&q=80&fit=crop"
+                        alt="Interior de bodega"
+                        class="post-img"
+                    >
+                </div>
+                <p class="post-category">Catas</p>
+                <h3 class="post-title">Vertical de Vega Sicilia: cuatro décadas en una copa</h3>
+                <p class="post-date">5 febrero 2026</p>
+            </article>
+            <article class="post-card fade-in delay-2">
+                <div class="post-img-wrap">
+                    <img
+                        src="https://images.unsplash.com/photo-1474722883778-792e7990302f?w=700&q=80&fit=crop"
+                        alt="Barricas de vino"
+                        class="post-img"
+                    >
+                </div>
+                <p class="post-category">Tendencias</p>
+                <h3 class="post-title">El regreso de las ánforas: tradición milenaria y vino natural</h3>
+                <p class="post-date">28 enero 2026</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     INSTAGRAM
+══════════════════════════════════════════ -->
+<section class="instagram">
+    <div class="instagram-header fade-in">
+        <span class="instagram-label">@terruñoblog</span>
+        <a href="#" class="link-arrow">Ver Instagram</a>
+    </div>
+    <div class="instagram-grid">
+        <div class="insta-item fade-in">
+            <img src="https://images.unsplash.com/photo-1547595628-c61a29f496f0?w=500&q=80&fit=crop&crop=center" alt="Instagram 1">
+        </div>
+        <div class="insta-item fade-in delay-1">
+            <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&q=80&fit=crop&crop=center" alt="Instagram 2">
+        </div>
+        <div class="insta-item fade-in delay-1">
+            <img src="https://images.unsplash.com/photo-1504279577054-acfeccf8fc52?w=500&q=80&fit=crop&crop=center" alt="Instagram 3">
+        </div>
+        <div class="insta-item fade-in delay-2">
+            <img src="https://images.unsplash.com/photo-1528823872057-9c018a7a7553?w=500&q=80&fit=crop&crop=center" alt="Instagram 4">
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     DARK SECTION
+══════════════════════════════════════════ -->
+<section class="dark-section">
+    <img
+        src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1920&q=80&fit=crop"
+        alt="Bodega oscura"
+        class="dark-bg"
+    >
+    <div class="dark-content fade-in">
+        <p class="dark-label">Únete al viaje</p>
+        <h2 class="dark-title">El vino espera<br>a quien sabe<br><em>escuchar</em></h2>
+        <p class="dark-body">Cada semana, una historia nueva desde los viñedos del mundo. Sin ruido, solo esencia.</p>
+        <div class="dark-ctas">
+            <a href="#" class="btn-outline-cream">Suscribirse al newsletter</a>
+            <a href="#" class="btn-outline-accent">Ver todas las catas</a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer>
+    <a href="#" class="footer-logo">Terruño</a>
+    <div class="footer-rule"></div>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>El blog</h4>
+            <ul>
+                <li><a href="#">Sobre Terruño</a></li>
+                <li><a href="#">El equipo</a></li>
+                <li><a href="#">Filosofía</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contenido</h4>
+            <ul>
+                <li><a href="#">Catas y reseñas</a></li>
+                <li><a href="#">Regiones vinícolas</a></li>
+                <li><a href="#">Bodegas visitadas</a></li>
+                <li><a href="#">Guías de maridaje</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Explorar</h4>
+            <ul>
+                <li><a href="#">Tintos</a></li>
+                <li><a href="#">Blancos</a></li>
+                <li><a href="#">Rosados</a></li>
+                <li><a href="#">Espumosos</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Newsletter</h4>
+            <p class="footer-desc">Una carta quincenal sobre vino, paisaje y cultura. Sin spam.</p>
+            <div class="footer-newsletter">
+                <input type="email" placeholder="tu@email.com" aria-label="Tu email">
+                <button type="submit">Suscribir →</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Terruño. Todos los derechos reservados.</p>
+        <p>Hecho con calma y buen vino.</p>
+    </div>
+</footer>
+
+
+<script>
+    // ── Fade-in on scroll ──────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(el => {
+            if (el.isIntersecting) {
+                el.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -48px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ── Tabs ───────────────────────────────────────
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+            // re-trigger fade-in for newly visible elements
+            document.querySelectorAll('#' + tab + ' .fade-in').forEach(el => {
+                el.classList.remove('visible');
+                setTimeout(() => el.classList.add('visible'), 50);
+            });
+        });
+    });
+
+    // ── Header opacity on scroll ───────────────────
+    window.addEventListener('scroll', () => {
+        document.querySelector('header').style.boxShadow =
+            window.scrollY > 10 ? '0 1px 0 #E8E4DC' : 'none';
+    });
+</script>
+
+</body>
+</html>
